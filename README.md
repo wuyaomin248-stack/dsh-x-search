@@ -1,5 +1,8 @@
 # dsh-x-search
 
+[![check](https://github.com/wuyaomin248-stack/dsh-x-search/actions/workflows/check.yml/badge.svg)](https://github.com/wuyaomin248-stack/dsh-x-search/actions/workflows/check.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 DeepSeek Harness 的 X（twitter）搜索与读取工具，**4 个只读工具**。
 不需要浏览器、不需要开页面 —— 插件自己算 `x-client-transaction-id`，直接打 X 的 GraphQL。
 
@@ -86,6 +89,9 @@ node tools/cli.mjs thread 1234567890 --pages 3
 ```
 
 CLI 与工具共用 `lib/xapi.mjs`，所以 CLI 通了工具就通。需要代理时先 `$env:HTTPS_PROXY='http://127.0.0.1:7890'`。
+
+CI（`.github/workflows/check.yml`）在 ubuntu/windows × node 20/22 四个组合上跑上面两条离线命令，不需要 `npm install`——本仓库零运行时依赖。
+`test/fixtures/search.json` 是**脱敏样本**（结构真实、文本/账号/id/链接全是占位），来源与脱敏方式见 `tools/make-fixture.mjs`。
 
 ## 只读边界
 
