@@ -69,7 +69,9 @@ console.log('[secrets]');
 const scanFiles = [];
 const walk = (dir) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (e.name === 'node_modules' || e.name === '.git' || e.name === 'tools') continue;
+    // .tmp 是本地临时目录（.gitignore 里），里面可能有 GitHub sha 之类的 40 位十六进制，
+    // 会被 auth_token 正则误伤；tools 是开发脚本，可能夹带抓包留下的临时数据。
+    if (e.name === 'node_modules' || e.name === '.git' || e.name === '.tmp' || e.name === 'tools') continue;
     const p = path.join(dir, e.name);
     if (e.isDirectory()) { if (e.name !== 'fixtures') walk(p); continue; }
     if (/\.(js|mjs|json|md|yml)$/.test(e.name)) scanFiles.push(p);
