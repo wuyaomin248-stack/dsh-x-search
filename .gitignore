@@ -1,0 +1,4 @@
+﻿node_modules/
+.tmp/
+lib/.load-check.tmp.mjs
+tools/stubs/

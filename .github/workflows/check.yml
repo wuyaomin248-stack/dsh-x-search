@@ -1,0 +1,28 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: node ${{ matrix.node }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # 不需要 npm install：离线自检与单测都零依赖（只有 lib/index.js 需要
+      # @deepseek-ai/*，那是 DSH 运行时注入的，所以加载测试用 stub 代替）
+      - name: 离线自检（结构 / 语法 / 工具数 / 无明文凭证 / 单测）
+        run: node scripts/check.mjs
+      - name: 加载自检（stub 替换 @deepseek-ai/* 后跑 apply）
+        run: node tools/probe-load.mjs
